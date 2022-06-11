@@ -53,18 +53,16 @@ Will be updated.
 
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Focus on Web channels 
+    - [ ] Detection by fingerprinting
+    - [ ] Detection by traffic analysis
+    - [ ] Behavior analysis
+- [ ] Focus on DNS usages
+- [ ] Focus on file transfer protocols
+- ...
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/Hato0/C2Hunter) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
