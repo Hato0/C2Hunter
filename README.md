@@ -4,7 +4,7 @@
 <br />
 <div align="center">
     <a href="https://github.com/Hato0/C2Hunter">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width=10%>
   </a>
 
 <h3 align="center">C2Hunter</h3>
@@ -26,7 +26,7 @@
 C2Hunter is a project to identify threats with an internal connection. 
 Command and Control is an opened remote connection used by threats to control the infected device inside your company. 
 
-Multiple type of C2 channel are used :
+Multiple type of C2 channel are used in the wild. They are based on :
 * Web Protocols
 * File Transfer Protocols 
 * Mail Protocols 
