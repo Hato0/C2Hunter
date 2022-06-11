@@ -4,7 +4,7 @@
 <br />
 <div align="center">
     <a href="https://github.com/Hato0/C2Hunter">
-    <img src="images/logo.png" alt="Logo" width="120" height="80">
+    <img src="images/logo.png" alt="Logo" width=50%>
   </a>
 
 <h3 align="center">C2Hunter</h3>
