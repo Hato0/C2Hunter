@@ -16,7 +16,7 @@ server.on("connection", (clientToProxySocket) => {
             if (err) {
               console.log(err);
             }
-            if (rows){
+            if (rows.length != 0){
                 rows.forEach((row) => {
                     console.log(row)   
                     db.run("UPDATE visitedURL SET count = " + row.count+1 + " WHERE URL = '" + row.URL + "';" , function(err) {
