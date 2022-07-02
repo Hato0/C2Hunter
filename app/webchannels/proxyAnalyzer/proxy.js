@@ -1,7 +1,7 @@
 const net = require("net");
 const server = net.createServer();
 const sqlite3 = require('sqlite3');
-const db = new sqlite3.Database('./database.sqlite3');
+const db = new sqlite3.Database('app/webchannels/proxyAnalyzer/database.sqlite3');
 
 server.on("connection", (clientToProxySocket) => {
     console.log("Client connected to proxy");
@@ -40,8 +40,8 @@ server.on("connection", (clientToProxySocket) => {
                     });
                 });
             } else {
-                db.run("INSERT INTO proxyLogs (URL, count, firstSeen, lastSeen, foHoursSeen, sourceIP) VALUES ('" 
-                + data.toString().split("Host: ")[1].split("\r\n")[0] + "', 1, '" + datetime + "', '" + datetime + "', 1, '" + clientIP + "')"
+                db.run("INSERT INTO proxyLogs (URL, count, firstSeen, lastSeen, foHoursSeen, sourceIP, isMalicious) VALUES ('" 
+                + data.toString().split("Host: ")[1].split("\r\n")[0] + "', 1, '" + datetime + "', '" + datetime + "', 1, '" + clientIP + "', 0)"
                 , function(err) {
                     if (err) {
                         return console.log(err.message);
@@ -49,46 +49,53 @@ server.on("connection", (clientToProxySocket) => {
                 });
             }
         });
-        if (isTLSConnection) {
-            serverPort = 443;
-            serverAddress = data
-                .toString()
-                .split("CONNECT")[1]
-                .split(" ")[1]
-                .split(":")[0];
-        } else {
-            serverAddress = data.toString().split("Host: ")[1].split("\r\n")[0];
-        }
-        console.log(serverAddress);
-
-        let proxyToServerSocket = net.createConnection(
-            {
-                host: serverAddress,
-                port: serverPort,
-            },
-            () => {
-                console.log("Proxy to server set up");
+        db.all("SELECT * FROM proxyLogs where URL = '"+ data.toString().split("Host: ")[1].split("\r\n")[0] + "' and isMalicious = 1", (err, rows) => {
+            if (err) {
+              console.log(err);
             }
-        );
+            if (rows.length == 0){
+                if (isTLSConnection) {
+                    serverPort = 443;
+                    serverAddress = data
+                        .toString()
+                        .split("CONNECT")[1]
+                        .split(" ")[1]
+                        .split(":")[0];
+                } else {
+                    serverAddress = data.toString().split("Host: ")[1].split("\r\n")[0];
+                }
+                console.log(serverAddress);
+
+                let proxyToServerSocket = net.createConnection(
+                    {
+                        host: serverAddress,
+                        port: serverPort,
+                    },
+                    () => {
+                        console.log("Proxy to server set up");
+                    }
+                );
 
 
-        if (isTLSConnection) {
-            clientToProxySocket.write("HTTP/1.1 200 OK\r\n\r\n");
-        } else {
-            proxyToServerSocket.write(data);
-        }
+                if (isTLSConnection) {
+                    clientToProxySocket.write("HTTP/1.1 200 OK\r\n\r\n");
+                } else {
+                    proxyToServerSocket.write(data);
+                }
 
-        clientToProxySocket.pipe(proxyToServerSocket);
-        proxyToServerSocket.pipe(clientToProxySocket);
+                clientToProxySocket.pipe(proxyToServerSocket);
+                proxyToServerSocket.pipe(clientToProxySocket);
 
-        proxyToServerSocket.on("error", (err) => {
-            console.log("Proxy to server error");
-            console.log(err);
-        });
+                proxyToServerSocket.on("error", (err) => {
+                    console.log("Proxy to server error");
+                    console.log(err);
+                });
 
-        clientToProxySocket.on("error", (err) => {
-            console.log("Client to proxy error");
-            console.log(err)
+                clientToProxySocket.on("error", (err) => {
+                    console.log("Client to proxy error");
+                    console.log(err)
+                });
+            }
         });
     });
 });

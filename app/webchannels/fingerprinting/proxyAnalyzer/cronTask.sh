@@ -1,1 +1,0 @@
-sqlite3 database.sqlite3 'UPDATE proxyLogs SET foHoursSeen = 0'

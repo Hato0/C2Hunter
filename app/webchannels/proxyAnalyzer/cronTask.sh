@@ -1,0 +1,1 @@
+sqlite3 app/webchannels/proxyAnalyzer/database.sqlite3 'UPDATE proxyLogs SET foHoursSeen = 0'
