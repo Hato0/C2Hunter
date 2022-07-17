@@ -1,0 +1,118 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Proxy</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href={{url_for('.index')}}>
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a>Proxy</a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a>Logs</a>
+                    </li>
+                </ul>
+            </div>
+			<div class="col-md-14">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">User statics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="multi-filter-select" class="display table table-striped table-hover" >
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th>URL</th>
+                                        <th>Count</th>
+                                        <th>First Seen</th>
+                                        <th>Last Seen</th>
+                                        <th>Source IP</th>
+                                        <th>Successive hours seen (24h)</th>
+                                        <th>Malicious</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>URL</th>
+                                        <th>Count</th>
+                                        <th>First Seen</th>
+                                        <th>Last Seen</th>
+                                        <th>Source IP</th>
+                                        <th>Successive hours seen (24h)</th>
+                                        <th>Malicious</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody style="text-align: center;">
+                                    {% for elem in logs %}
+                                    <tr>
+                                        <th>{{ elem[1] }}</th>
+                                        <th>{{ elem[2] }}</th>
+                                        <th>{{ elem[3] }}</th>
+                                        <th>{{ elem[4] }}</th>
+                                        <th>{{ elem[6] }}</th>
+                                        <th>{{ elem[5] }}</th>
+                                        <th>{% if elem[7] == 1 %}Yes{% else %} No {% endif %}</th>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+	<script >
+		$(document).ready(function() {
+			$('#basic-datatables').DataTable({
+			});
+
+			$('#multi-filter-select').DataTable( {
+				"pageLength": 5,
+				initComplete: function () {
+					this.api().columns().every( function () {
+						var column = this;
+						var select = $('<select class="form-control"><option value=""></option></select>')
+						.appendTo( $(column.footer()).empty() )
+						.on( 'change', function () {
+							var val = $.fn.dataTable.util.escapeRegex(
+								$(this).val()
+								);
+
+							column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+						} );
+
+						column.data().unique().sort().each( function ( d, j ) {
+							select.append( '<option value="'+d+'">'+d+'</option>' )
+						} );
+					} );
+				}
+			});
+		});
+	</script>
+{% endblock javascripts %}

@@ -1,0 +1,155 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="panel-header">
+			<div class="page-inner py-5">
+				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+					<div>
+						<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
+						<h5 class="text-white op-7 mb-2">C2Hunter - Detection POC</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-inner mt--5">
+			<div class="row mt--2">
+				<div class="col-md-6">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Overall informations</div>
+							<div class="card-category">Overall system state</div>
+							<div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-1"></div>
+									<h6 class="fw-bold mt-3 mb-0">Proxy state</h6>
+									{% if proxyState %}
+										<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 25%; color: green;">RUNNING</div>
+									{% else %}
+										<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 25%; color: red;">DOWN</div>
+									{% endif %}
+								</div>
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-2"></div>
+									<h6 class="fw-bold mt-3 mb-0">Malicious URL</h6>
+									<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 20%;">{{ maliciousURLCount }}</div>
+								</div>
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-3"></div>
+									<h6 class="fw-bold mt-3 mb-0">Malicious signature</h6>
+									<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 15%;">{{ maliciousSignatureCount }}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Potential malware seen</div>
+								<div class="row py-3" style="text-align: center;">
+									<table class="table mt-3">
+										<thead>
+											<tr>
+												<th scope="col">Malware</th>
+												<th scope="col">Last seen</th>
+												<th scope="col">Connection source(s)</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for elem in malwareData %}
+											<tr>
+												<th>{{ elem[0] }}</th>
+												<th>{{ elem[1] }}</th>
+												<th>{{ elem[2] }}</th>
+											</tr>
+										  	{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-14">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">User statics</h4>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="multi-filter-select" class="display table table-striped table-hover" >
+									<thead style="text-align: center;">
+										<tr>
+											<th>IP</th>
+											<th>Malware seen</th>
+											<th>Malicious URL contacted</th>
+											<th>Contacted websites</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>IP</th>
+											<th>Malware seen</th>
+											<th>Malicious URL contacted</th>
+											<th>Contacted websites</th>
+										</tr>
+									</tfoot>
+									<tbody style="text-align: center;">
+										{% for elem in userData %}
+										<tr>
+											<th>{{ elem[0] }}</th>
+											<th>{{ elem[1] }}</th>
+											<th>{{ elem[2] }}</th>
+											<th>{{ elem[3] }}</th>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+	<script >
+		$(document).ready(function() {
+			$('#basic-datatables').DataTable({
+			});
+
+			$('#multi-filter-select').DataTable( {
+				"pageLength": 5,
+				initComplete: function () {
+					this.api().columns().every( function () {
+						var column = this;
+						var select = $('<select class="form-control"><option value=""></option></select>')
+						.appendTo( $(column.footer()).empty() )
+						.on( 'change', function () {
+							var val = $.fn.dataTable.util.escapeRegex(
+								$(this).val()
+								);
+
+							column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+						} );
+
+						column.data().unique().sort().each( function ( d, j ) {
+							select.append( '<option value="'+d+'">'+d+'</option>' )
+						} );
+					} );
+				}
+			});
+		});
+	</script>
+{% endblock javascripts %}

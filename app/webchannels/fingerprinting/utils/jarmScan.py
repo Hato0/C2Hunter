@@ -9,5 +9,10 @@ class JARMScan(object):
 
     def generateJARM(self):
         logging.getLogger('asyncio').setLevel(logging.CRITICAL)
-        JARM = Scanner.scan(self.url, self.port, timeout=5, suppress=True)
-        return JARM
+        JARM = []
+        for i in range(3):
+            JARM.append(Scanner.scan(self.url, self.port, timeout=5, suppress=True))
+        if len(set(JARM)) == 1:
+            return JARM[0]
+        else:
+            return False

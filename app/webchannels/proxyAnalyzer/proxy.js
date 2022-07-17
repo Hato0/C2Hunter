@@ -40,8 +40,8 @@ server.on("connection", (clientToProxySocket) => {
                     });
                 });
             } else {
-                db.run("INSERT INTO proxyLogs (URL, count, firstSeen, lastSeen, foHoursSeen, sourceIP, isMalicious) VALUES ('" 
-                + data.toString().split("Host: ")[1].split("\r\n")[0] + "', 1, '" + datetime + "', '" + datetime + "', 1, '" + clientIP + "', 0)"
+                db.run("INSERT INTO proxyLogs (URL, count, firstSeen, lastSeen, foHoursSeen, sourceIP, isMalicious, isBlacklisted, isWhitelisted) VALUES ('" 
+                + data.toString().split("Host: ")[1].split("\r\n")[0] + "', 1, '" + datetime + "', '" + datetime + "', 1, '" + clientIP + "', 0, 0, 0)"
                 , function(err) {
                     if (err) {
                         return console.log(err.message);
@@ -49,7 +49,7 @@ server.on("connection", (clientToProxySocket) => {
                 });
             }
         });
-        db.all("SELECT * FROM proxyLogs where URL = '"+ data.toString().split("Host: ")[1].split("\r\n")[0] + "' and isMalicious = 1", (err, rows) => {
+        db.all("SELECT * FROM proxyLogs where URL = '"+ data.toString().split("Host: ")[1].split("\r\n")[0] + "' and isBlacklisted = 1", (err, rows) => {
             if (err) {
               console.log(err);
             }

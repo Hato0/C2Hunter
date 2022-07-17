@@ -9,12 +9,18 @@ from fingerprinting.utils.jarmScan import JARMScan
 
 parser = argparse.ArgumentParser(description="Brain of webchannels detection")
 parser.add_argument('-c', '--criteria', help='Number of hours that an URL should be visited in the last 24h. Default = 10')
+parser.add_argument('-m', '--mode', help='Auto or manual (0,1)')
+
 args = parser.parse_args()
 
 if args.criteria:
     criteria = args.criteria
 else:
     criteria = 10
+if args.mode:
+    mode = args.mode
+else:
+    mode = 0
 
 def createConnection(db_file):
     conn = None
@@ -59,13 +65,27 @@ def getKnownSignature(conn, potentialC2):
 
 def urlAnalyze(Id, URL, JARM, JA3, JA3S):
     print(f'    [-] Processing {URL}')
+    global mode
     scanner = JARMScan(URL)
     if not JARM:
         JARM = scanner.generateJARM()
-        JARMResult = jarmAnalyze(JARM[0], Id)
+        if JARM:
+            JARMResult = jarmAnalyze(JARM[0], Id)
     else:
         JARMResult = jarmAnalyze(JARM[0][0], Id)
     if JARMResult:
+        database = "app/webchannels/proxyAnalyzer/database.sqlite3"
+        conn = createConnection(database)
+        cur = conn.cursor()
+        if mode == 0:
+            whitelistedTest = conn.execute(f"SELECT Id, URL FROM proxyLogs where URL = '{URL[0]}' and isWhitelisted = 1;").fetchall()
+            if not whitelistedTest:
+                cur.execute(f"UPDATE proxyLogs SET isMalicious = 1, isBlacklisted = 1 where URL = '{URL[0]}';")
+            else:
+                cur.execute(f"UPDATE proxyLogs SET isMalicious = 1 where URL = '{URL[0]}';")
+        else:
+            cur.execute(f"UPDATE proxyLogs SET isMalicious = 1 where URL = '{URL[0]}';")
+        conn.commit()
         print(f"    [-] Malicious for JARM: {URL}")
 
 def jarmAnalyze(signature, Id):

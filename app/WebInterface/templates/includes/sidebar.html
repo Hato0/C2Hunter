@@ -1,0 +1,120 @@
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2" data-background-color="dark2">			
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+				<div class="sidebar-content">
+
+				{% if current_user.is_authenticated %}	
+					<div class="user">
+						<div class="avatar-sm float-left mr-2">
+							{% if current_user.profilPicturePath|length > 0 %}
+							<img src="{{ current_user.profilPicturePath }}" alt="..." class="avatar-img rounded-circle">
+							{% else %}
+							<img src="/static/assets/img/default.png" alt="..." class="avatar-img rounded-circle">
+							{% endif %}
+						</div>
+						<div class="info">
+							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+								<span>
+									{{ current_user.username }}
+									<span class="user-level">
+										{{ current_user.email }}
+									</span>
+									<span class="caret"></span>
+								</span>
+							</a>
+							<div class="clearfix"></div>
+
+							<div class="collapse in" id="collapseExample">
+								<ul class="nav">
+									<li>
+										<a href="#profile">
+											<span class="link-collapse">My Profile</span>
+										</a>
+									</li>
+									<li>
+										<a href="{{ url_for('authentication_blueprint.logout') }}">
+											<span class="link-collapse">Logout</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<ul class="nav nav-primary">
+						<li class="nav-item {% if 'index' in segment %} active {% endif %}">
+							<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+								<i class="fas fa-home"></i>
+								<p>Dashboard</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse {% if 'index' in segment %} show {% endif %}" id="dashboard">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="/index.html">
+											<span class="sub-item">Dashboard</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Functionnalities</h4>
+						</li>
+						<li class="nav-item {% if 'proxy-' in segment %} active {% endif %}">
+							<a data-toggle="collapse" href="#proxy">
+								<i class="fas fa-layer-group"></i>
+								<p>Proxy</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse {% if 'proxy-' in segment %} show {% endif %}" id="proxy">
+								<ul class="nav nav-collapse">
+									<li class="{% if 'proxy-management' in segment %} active {% endif %}">
+										<a href="/proxy-management.html">
+											<span class="sub-item">Manage</span>
+										</a>
+									</li>
+									<li class="{% if 'proxy-logs' in segment %} active {% endif %}">
+										<a href="/proxy-logs.html">
+											<span class="sub-item">Logs</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item {% if 'security-' in segment %} active {% endif %}">
+							<a data-toggle="collapse" href="#security">
+								<i class="fas fa-layer-group"></i>
+								<p>Security</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse {% if 'security-' in segment %} show {% endif %}" id="security">
+								<ul class="nav nav-collapse">
+									<li class="{% if 'security-settings' in segment %} active {% endif %}">
+										<a href="/security-settings.html">
+											<span class="sub-item">Settings</span>
+										</a>
+									</li>
+									<li class="{% if 'security-blacklist' in segment %} active {% endif %}">
+										<a href="/security-blacklist.html">
+											<span class="sub-item">Blacklist</span>
+										</a>
+									</li>
+									<li class="{% if 'security-whitelist' in segment %} active {% endif %}">
+										<a href="/security-whitelist.html">
+											<span class="sub-item">Whitelist</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				{% else %}
+				{% endif %}	
+				</div>
+			</div>
+		</div>
+        <!-- End Sidebar -->
+    

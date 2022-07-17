@@ -1,0 +1,109 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} SimpleLine Icons {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/assets/css/custom.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Proxy</h4>
+				<ul class="breadcrumbs">
+					<li class="nav-home">
+						<a href={{url_for('.index')}}>
+							<i class="flaticon-home"></i>
+						</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a>Proxy</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a>Manage</a>
+					</li>
+				</ul>
+			</div>
+			<div class="row mt--2">
+				<div class="col-md-6">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Overall informations</div>
+							<div class="card-category">Overall system state</div>
+							<div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-1"></div>
+									<h6 class="fw-bold mt-3 mb-0">Proxy state</h6>
+									{% if proxyState %}
+										<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 25%; color: green;">RUNNING</div>
+									{% else %}
+										<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 25%; color: red;">DOWN</div>
+									{% endif %}
+								</div>
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-2"></div>
+									<h6 class="fw-bold mt-3 mb-0">Malicious URL</h6>
+									<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 20%;">{{ maliciousURLCount }}</div>
+								</div>
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-3"></div>
+									<h6 class="fw-bold mt-3 mb-0">Malicious signature</h6>
+									<div class="px-2 pb-2 pb-md-0 text-center" style="margin-top: 15%;">{{ maliciousSignatureCount }}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Power control</div>
+						</div>
+						<div class="card-body">
+							<div class="selectgroup selectgroup-pills" >
+								<form name="myForm" action="" method="post" onsubmit="">
+									<label class="selectgroup-item">
+										{% if proxyState == 1 %}
+										<input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
+										{% else %}
+										<input type="radio" name="icon-input" value="1" class="selectgroup-input">
+										{% endif %}
+										<span class="selectgroup-button selectgroup-button-icon"><i class="fa fa-sun fa-xl"></i></span>
+									</label> 
+									<label class="selectgroup-item">
+										{% if proxyState != 1 %}
+										<input type="radio" name="icon-input" value="2" class="selectgroup-input" checked="">
+										{% else %}
+										<input type="radio" name="icon-input" value="2" class="selectgroup-input">
+										{% endif %}
+										<span class="selectgroup-button selectgroup-button-icon"><i class="fa fa-moon fa-xl"></i></span>
+									</label>
+									<div class="card-action">
+									<p><input class="btn btn-success" type=submit value=Update></p>
+								</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<style>
+	.fast .toggle-group { transition: left 0.1s; -webkit-transition: left 0.1s; }
+  </style>
+{% endblock javascripts %}
