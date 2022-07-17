@@ -48,7 +48,10 @@ pip install -r requirements.txt
 
 ### Installation
 
-Will be updated.
+Go to app directory and just launch the UI entering the following command:
+```python
+python3 run.py
+```
 
 ## Usage
 
@@ -56,10 +59,10 @@ Will be updated.
 
 ## Roadmap
 
-- [ ] Focus on Web channels 
-    - [ ] Detection by fingerprinting
-    - [ ] Detection by traffic analysis
-    - [ ] Behavior analysis
+- [X] Focus on Web channels 
+    - [X] Detection by fingerprinting
+    - [X] Detection by traffic analysis
+    - [X] Behavior analysis
 - [ ] Focus on DNS usages
 - [ ] Focus on file transfer protocols
 - ...
